@@ -245,7 +245,7 @@
 /* ---------------------------------------------------------------
    CONFIGURAÇÃO — cole a URL do app do Apps Script (termina em /exec)
 --------------------------------------------------------------- */
-const API = "https://script.google.com/macros/s/AKfycbwlnhZTXvoW-UoNRBS_vTlNf4qWiiaQ8Hq4mIOJs_JFVJGt_AgRpDuDnP6vB4OxYO3e7Q/exec";
+const API = "COLE_AQUI_A_URL_DO_APPS_SCRIPT";
 
 const $ = s => document.querySelector(s);
 const turma = new URLSearchParams(location.search).get("turma") || "";
@@ -257,12 +257,8 @@ function mostrar(id){
 }
 
 async function api(payload){
-  const r = await fetch(API, {
-    method:"POST",
-    headers:{"Content-Type":"text/plain;charset=utf-8"},
-    body: JSON.stringify(payload),
-    redirect:"follow"
-  });
+  const url = API + "?p=" + encodeURIComponent(JSON.stringify(payload));
+  const r = await fetch(url, { method:"GET", redirect:"follow" });
   return r.json();
 }
 
