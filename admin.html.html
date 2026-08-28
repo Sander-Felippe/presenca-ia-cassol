@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Presença · Painel do organizador · CASSOL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root{
+    --navy-900:#061627;--navy-800:#0B2540;--line:rgba(139,175,214,.22);
+    --red:#E4002B;--cyan:#4FD1E8;--ink:#F1F6FB;--muted:#93AEC9;--ok:#3DDC97;--radius:14px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:26px 20px 60px;color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased;
+    background:radial-gradient(120% 60% at 50% -10%,#143761 0%,transparent 60%),linear-gradient(180deg,var(--navy-900),#04101D);
+    background-attachment:fixed;min-height:100dvh;
+  }
+  .wrap{max-width:1020px;margin:0 auto}
+  .brand{display:flex;align-items:center;gap:10px;margin-bottom:26px}
+  .brand-mark{width:6px;height:26px;background:var(--red);border-radius:2px}
+  .brand-name{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:20px;letter-spacing:.16em}
+  .brand-tag{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-left:auto}
+  h1{font-family:"Space Grotesk",sans-serif;font-size:27px;margin:0 0 6px}
+  h2{font-family:"Space Grotesk",sans-serif;font-size:16px;letter-spacing:.02em;margin:0 0 16px;display:flex;align-items:center;gap:10px}
+  h2::before{content:"";width:4px;height:16px;background:var(--red);border-radius:2px}
+  .sub{color:var(--muted);margin:0 0 26px;font-size:15px}
+  .card{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin-bottom:20px}
+  label{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;font-weight:500}
+  input,select{
+    width:100%;height:46px;padding:0 13px;background:rgba(255,255,255,.04);
+    border:1px solid var(--line);border-radius:10px;color:var(--ink);font-family:inherit;font-size:15px;
+  }
+  input:focus,select:focus{outline:none;border-color:var(--cyan)}
+  select option{background:var(--navy-800)}
+  .linha{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+  .linha>div{flex:1;min-width:170px}
+  button{
+    height:46px;padding:0 18px;border-radius:10px;border:1px solid var(--line);
+    background:rgba(255,255,255,.05);color:var(--ink);font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;
+    transition:filter .15s,border-color .15s;white-space:nowrap;
+  }
+  button:hover{filter:brightness(1.25)}
+  button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+  button.vermelho{background:var(--red);border-color:var(--red);color:#fff;font-weight:600}
+  button.mini{height:34px;padding:0 12px;font-size:12.5px}
+  .contador{display:flex;gap:28px;flex-wrap:wrap;margin-bottom:20px}
+  .contador div{flex:none}
+  .contador b{display:block;font-family:"Space Grotesk",sans-serif;font-size:34px;line-height:1.1}
+  .contador span{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{text-align:left;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 10px 10px;font-weight:500}
+  td{padding:11px 10px;border-top:1px solid var(--line);vertical-align:middle}
+  td.mono{font-family:"IBM Plex Mono",monospace;font-size:13px}
+  .tag{font-size:10.5px;letter-spacing:.1em;padding:3px 7px;border-radius:5px;font-weight:600}
+  .tag.ok{background:rgba(61,220,151,.13);color:var(--ok)}
+  .tag.dup{background:rgba(255,190,80,.14);color:#FFC978}
+  .tag.aberta{background:rgba(79,209,232,.13);color:var(--cyan)}
+  .tag.fechada{background:rgba(147,174,201,.13);color:var(--muted)}
+  .rolagem{overflow-x:auto}
+  .vazio{color:var(--muted);font-size:14.5px;padding:18px 2px}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+  dialog{
+    border:1px solid var(--line);border-radius:16px;background:var(--navy-800);color:var(--ink);
+    padding:26px;max-width:340px;text-align:center;
+  }
+  dialog::backdrop{background:rgba(4,16,29,.75)}
+  #qr-box{background:#fff;padding:14px;border-radius:10px;display:inline-block;margin:6px 0 14px}
+  #qr-link{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted);word-break:break-all;margin-bottom:16px}
+  .aviso{font-size:13px;color:#FFC978;margin-top:12px}
+  .oculto{display:none !important}
+  @media print{body *{visibility:hidden}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">
+    <div class="brand-mark"></div>
+    <div class="brand-name">CASSOL</div>
+    <div class="brand-tag">Painel do organizador · Presença</div>
+  </div>
+
+  <!-- login -->
+  <div id="login" class="card" style="max-width:400px">
+    <h2>Acesso restrito</h2>
+    <label for="senha">Senha do organizador</label>
+    <input id="senha" type="password" autocomplete="current-password">
+    <div class="toolbar"><button class="vermelho" id="btn-entrar">Entrar</button></div>
+    <div class="aviso oculto" id="erro-login">Senha incorreta.</div>
+  </div>
+
+  <!-- painel -->
+  <div id="painel" class="oculto">
+    <h1>Lista de presença</h1>
+    <p class="sub">Abra uma turma, projete o QR code na sala e feche a coleta ao final do treinamento.</p>
+
+    <div class="card">
+      <h2>Endereço do formulário</h2>
+      <div class="linha">
+        <div>
+          <label for="base">URL da página de presença</label>
+          <input id="base" placeholder="https://presenca-ia-cassol.vercel.app/">
+        </div>
+        <button id="btn-base">Salvar</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Turmas</h2>
+      <div class="linha">
+        <div>
+          <label for="nova-turma">Código da turma</label>
+          <input id="nova-turma" placeholder="2026-08-29-manha">
+        </div>
+        <div>
+          <label for="novo-titulo">Nome exibido</label>
+          <input id="novo-titulo" placeholder="29/08 · Manhã">
+        </div>
+        <button class="vermelho" id="btn-criar">Criar e abrir</button>
+      </div>
+      <div class="rolagem" style="margin-top:20px">
+        <table id="tab-turmas"><tbody></tbody></table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Registros</h2>
+      <div class="linha" style="margin-bottom:22px">
+        <div>
+          <label for="filtro">Turma</label>
+          <select id="filtro"></select>
+        </div>
+        <button id="btn-atualizar">Atualizar agora</button>
+      </div>
+
+      <div class="contador">
+        <div><b id="n-total">0</b><span>Registros</span></div>
+        <div><b id="n-unicos">0</b><span>Pessoas</span></div>
+        <div><b id="n-dup">0</b><span>Duplicados</span></div>
+        <div><b id="n-setores">0</b><span>Setores</span></div>
+      </div>
+
+      <div class="rolagem">
+        <table id="tab-presencas">
+          <thead><tr><th>Horário</th><th>Matrícula</th><th>Nome</th><th>Setor</th><th>Status</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="vazio oculto" id="sem-registros">Nenhuma presença registrada nesta turma ainda.</div>
+
+      <div class="toolbar">
+        <button id="btn-csv">Exportar CSV</button>
+        <button id="btn-imprimir">Imprimir lista assinada</button>
+        <button id="btn-branco">Imprimir lista em branco</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<dialog id="dlg-qr">
+  <h2 style="justify-content:center" id="qr-titulo">Turma</h2>
+  <div id="qr-box"></div>
+  <div id="qr-link"></div>
+  <div class="toolbar" style="justify-content:center">
+    <button id="btn-baixar">Baixar PNG</button>
+    <button onclick="document.getElementById('dlg-qr').close()">Fechar</button>
+  </div>
+</dialog>
+
+<script>
+/* ---------------------------------------------------------------
+   CONFIGURAÇÃO — mesma URL do Apps Script usada em presenca.html
+--------------------------------------------------------------- */
+const API = "COLE_AQUI_A_URL_DO_APPS_SCRIPT";
+
+const $ = s => document.querySelector(s);
+let senha = "", turmas = [], registros = [], timer = null;
+
+async function api(payload){
+  const url = API + "?p=" + encodeURIComponent(JSON.stringify({...payload, senha}));
+  const r = await fetch(url, { method:"GET", redirect:"follow" });
+  return r.json();
+}
+
+/* ---------- acesso ---------- */
+$("#btn-entrar").addEventListener("click", entrar);
+$("#senha").addEventListener("keydown", e=>{ if(e.key==="Enter") entrar(); });
+
+async function entrar(){
+  senha = $("#senha").value;
+  const res = await api({acao:"admin_turmas"});
+  if(!res.ok){ $("#erro-login").classList.remove("oculto"); return; }
+  sessionStorage.setItem("presenca_senha", senha);
+  $("#login").classList.add("oculto");
+  $("#painel").classList.remove("oculto");
+  $("#base").value = localStorage.getItem("presenca_base") || "";
+  turmas = res.turmas;
+  desenharTurmas();
+  await carregarRegistros();
+  timer = setInterval(carregarRegistros, 15000);
+}
+
+const guardada = sessionStorage.getItem("presenca_senha");
+if(guardada){ $("#senha").value = guardada; entrar(); }
+
+/* ---------- endereço do formulário ---------- */
+$("#btn-base").addEventListener("click", ()=>{
+  const v = $("#base").value.trim();
+  localStorage.setItem("presenca_base", v.endsWith("/") ? v : v + "/");
+  $("#base").value = localStorage.getItem("presenca_base");
+});
+
+function linkTurma(t){
+  const base = localStorage.getItem("presenca_base") || "";
+  return base + "?turma=" + encodeURIComponent(t);
+}
+
+/* ---------- turmas ---------- */
+$("#btn-criar").addEventListener("click", async ()=>{
+  const t = $("#nova-turma").value.trim().toLowerCase().replace(/\s+/g,"-");
+  const titulo = $("#novo-titulo").value.trim() || t;
+  if(!t) return;
+  const res = await api({acao:"admin_criar_turma", turma:t, titulo});
+  if(!res.ok){ alert(res.motivo === "existe" ? "Já existe uma turma com esse código." : "Não foi possível criar."); return; }
+  turmas = res.turmas;
+  $("#nova-turma").value = ""; $("#novo-titulo").value = "";
+  desenharTurmas();
+});
+
+function desenharTurmas(){
+  const tb = $("#tab-turmas").querySelector("tbody");
+  tb.innerHTML = turmas.length ? turmas.map(t=>`
+    <tr>
+      <td class="mono">${t.turma}</td>
+      <td>${t.titulo}</td>
+      <td><span class="tag ${t.aberta?"aberta":"fechada"}">${t.aberta?"ABERTA":"FECHADA"}</span></td>
+      <td style="text-align:right;white-space:nowrap">
+        <button class="mini" onclick="abrirQR('${t.turma}','${t.titulo.replace(/'/g,"\\'")}')">QR code</button>
+        <button class="mini" onclick="alternar('${t.turma}',${!t.aberta})">${t.aberta?"Encerrar":"Reabrir"}</button>
+      </td>
+    </tr>`).join("") : `<tr><td class="vazio">Nenhuma turma criada.</td></tr>`;
+
+  const sel = $("#filtro"), atual = sel.value;
+  sel.innerHTML = turmas.map(t=>`<option value="${t.turma}">${t.titulo}</option>`).join("");
+  if(atual && turmas.some(t=>t.turma===atual)) sel.value = atual;
+}
+
+async function alternar(turma, aberta){
+  if(!aberta && !confirm("Encerrar a coleta desta turma? Novos envios serão recusados.")) return;
+  const res = await api({acao:"admin_toggle_turma", turma, aberta});
+  if(res.ok){ turmas = res.turmas; desenharTurmas(); }
+}
+
+/* ---------- QR ---------- */
+function abrirQR(turma, titulo){
+  const base = localStorage.getItem("presenca_base");
+  if(!base){ alert("Informe primeiro a URL da página de presença."); return; }
+  const url = linkTurma(turma);
+  $("#qr-titulo").textContent = titulo;
+  $("#qr-box").innerHTML = "";
+  new QRCode($("#qr-box"), {text:url, width:240, height:240, correctLevel:QRCode.CorrectLevel.M});
+  $("#qr-link").textContent = url;
+  $("#dlg-qr").showModal();
+  $("#btn-baixar").onclick = ()=>{
+    const cv = $("#qr-box").querySelector("canvas");
+    const a = document.createElement("a");
+    a.href = cv.toDataURL("image/png");
+    a.download = "qr-presenca-" + turma + ".png";
+    a.click();
+  };
+}
+
+/* ---------- registros ---------- */
+$("#filtro").addEventListener("change", carregarRegistros);
+$("#btn-atualizar").addEventListener("click", carregarRegistros);
+
+async function carregarRegistros(){
+  const turma = $("#filtro").value;
+  if(!turma) return;
+  const res = await api({acao:"admin_listar", turma});
+  if(!res.ok) return;
+  registros = res.registros;
+
+  const dup = registros.filter(r=>r.status === "DUPLICADO").length;
+  $("#n-total").textContent = registros.length;
+  $("#n-unicos").textContent = new Set(registros.map(r=>r.matricula)).size;
+  $("#n-dup").textContent = dup;
+  $("#n-setores").textContent = new Set(registros.map(r=>r.setor.toLowerCase())).size;
+
+  const tb = $("#tab-presencas").querySelector("tbody");
+  tb.innerHTML = registros.map(r=>`
+    <tr>
+      <td class="mono">${r.hora}</td>
+      <td class="mono">${r.matricula}</td>
+      <td>${escapar(r.nome)}</td>
+      <td>${escapar(r.setor)}</td>
+      <td><span class="tag ${r.status==="DUPLICADO"?"dup":"ok"}">${r.status}</span></td>
+      <td style="text-align:right"><button class="mini" onclick="excluir('${r.id}')">Excluir</button></td>
+    </tr>`).join("");
+  $("#sem-registros").classList.toggle("oculto", registros.length > 0);
+  $("#tab-presencas").classList.toggle("oculto", registros.length === 0);
+}
+
+function escapar(s){ return String(s).replace(/[<>&]/g, c=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[c])); }
+
+async function excluir(id){
+  if(!confirm("Excluir este registro? A ação não pode ser desfeita.")) return;
+  const res = await api({acao:"admin_excluir", id});
+  if(res.ok) carregarRegistros();
+}
+
+/* ---------- saídas ---------- */
+$("#btn-csv").addEventListener("click", ()=>{
+  const turma = $("#filtro").value;
+  const linhas = [["Horario","Matricula","Nome completo","Setor","Status","Turma"]]
+    .concat(registros.map(r=>[r.hora,r.matricula,r.nome,r.setor,r.status,turma]));
+  const csv = "\uFEFF" + linhas.map(l=>l.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(";")).join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+  a.download = "presenca-" + turma + ".csv";
+  a.click();
+});
+
+function janelaImpressao(titulo, corpo){
+  const w = window.open("", "_blank");
+  w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><title>${titulo}</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;color:#111;margin:26px}
+    h1{font-size:17px;margin:0 0 3px}
+    .meta{font-size:12px;color:#555;margin-bottom:18px}
+    .barra{height:5px;background:#E4002B;width:60px;margin-bottom:14px}
+    table{width:100%;border-collapse:collapse;font-size:12px}
+    th,td{border:1px solid #999;padding:7px 8px;text-align:left}
+    th{background:#eee;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+    td{height:26px}
+    .rodape{margin-top:22px;font-size:10.5px;color:#666}
+  </style></head><body>${corpo}
+  <div class="rodape">CASSOL · Registro de participação em treinamento. Dados coletados exclusivamente para esta finalidade.</div>
+  </body></html>`);
+  w.document.close();
+  w.focus();
+  setTimeout(()=>w.print(), 350);
+}
+
+$("#btn-imprimir").addEventListener("click", ()=>{
+  const t = turmas.find(x=>x.turma === $("#filtro").value) || {};
+  const linhas = registros.map((r,i)=>`<tr><td>${i+1}</td><td>${r.matricula}</td><td>${escapar(r.nome)}</td><td>${escapar(r.setor)}</td><td></td></tr>`).join("");
+  janelaImpressao("Lista de presença", `
+    <div class="barra"></div>
+    <h1>Treinamento de IA · Lista de presença</h1>
+    <div class="meta">Turma: ${t.titulo||""} (${t.turma||""}) · ${registros.length} registros · Emitida em ${new Date().toLocaleString("pt-BR")}</div>
+    <table><tr><th>#</th><th>Matrícula</th><th>Nome completo</th><th>Setor</th><th style="width:30%">Assinatura</th></tr>${linhas}</table>`);
+});
+
+$("#btn-branco").addEventListener("click", ()=>{
+  const t = turmas.find(x=>x.turma === $("#filtro").value) || {};
+  let linhas = "";
+  for(let i=1;i<=28;i++) linhas += `<tr><td>${i}</td><td></td><td></td><td></td><td></td></tr>`;
+  janelaImpressao("Lista de presença (reserva)", `
+    <div class="barra"></div>
+    <h1>Treinamento de IA · Lista de presença (reserva)</h1>
+    <div class="meta">Turma: ${t.titulo||"____________"} · Use esta folha se o formulário digital não abrir na sala.</div>
+    <table><tr><th>#</th><th style="width:14%">Matrícula</th><th style="width:32%">Nome completo</th><th style="width:22%">Setor</th><th>Assinatura</th></tr>${linhas}</table>`);
+});
+</script>
+</body>
+</html>
