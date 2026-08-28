@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Presença · Treinamento de IA · CASSOL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-900:#061627;
+    --navy-800:#0B2540;
+    --navy-700:#123157;
+    --line:rgba(139,175,214,.22);
+    --red:#E4002B;
+    --cyan:#4FD1E8;
+    --ink:#F1F6FB;
+    --muted:#93AEC9;
+    --ok:#3DDC97;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    min-height:100dvh;
+    background:
+      radial-gradient(120% 70% at 50% -10%, #143761 0%, transparent 60%),
+      linear-gradient(180deg,var(--navy-900) 0%, #04101D 100%);
+    background-attachment:fixed;
+    color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    display:flex;flex-direction:column;align-items:center;
+    padding:28px 18px 40px;
+  }
+  .wrap{width:100%;max-width:460px}
+
+  /* cabeçalho */
+  .brand{display:flex;align-items:center;gap:10px;margin-bottom:26px}
+  .brand-mark{width:6px;height:26px;background:var(--red);border-radius:2px}
+  .brand-name{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:20px;letter-spacing:.16em}
+  .brand-tag{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-left:auto}
+
+  h1{font-family:"Space Grotesk",sans-serif;font-size:30px;line-height:1.15;margin:0 0 8px;font-weight:700}
+  .sub{color:var(--muted);font-size:15px;line-height:1.5;margin:0 0 8px}
+  .turma-chip{
+    display:inline-flex;align-items:center;gap:8px;margin:14px 0 26px;
+    font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.06em;
+    background:rgba(79,209,232,.09);border:1px solid rgba(79,209,232,.3);color:var(--cyan);
+    padding:7px 12px;border-radius:999px;
+  }
+  .turma-chip b{font-weight:600;color:var(--ink)}
+
+  /* formulário */
+  label{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:500}
+  .field{margin-bottom:20px}
+  input{
+    width:100%;height:56px;padding:0 16px;
+    background:rgba(255,255,255,.04);
+    border:1px solid var(--line);border-radius:var(--radius);
+    color:var(--ink);font-size:17px;font-family:inherit;
+    transition:border-color .15s, background .15s;
+  }
+  input::placeholder{color:#5C7897}
+  input:focus{outline:none;border-color:var(--cyan);background:rgba(79,209,232,.06)}
+  input:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+  #matricula{font-family:"IBM Plex Mono",monospace;letter-spacing:.12em;font-size:19px}
+  .hint{font-size:12.5px;color:#6E8CAC;margin-top:7px}
+  .erro{font-size:13px;color:#FF7A8F;margin-top:7px;display:none}
+  .field.invalido input{border-color:#FF7A8F}
+  .field.invalido .erro{display:block}
+
+  button.primary{
+    width:100%;height:58px;margin-top:6px;
+    background:var(--red);color:#fff;border:0;border-radius:var(--radius);
+    font-family:"Space Grotesk",sans-serif;font-size:17px;font-weight:700;letter-spacing:.04em;
+    cursor:pointer;transition:transform .12s, filter .15s;
+  }
+  button.primary:hover{filter:brightness(1.08)}
+  button.primary:active{transform:scale(.985)}
+  button.primary:disabled{opacity:.55;cursor:progress}
+  button.primary:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+
+  /* estados */
+  .estado{
+    border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 22px;text-align:center;background:rgba(255,255,255,.03);
+  }
+  .estado h2{font-family:"Space Grotesk",sans-serif;font-size:21px;margin:0 0 10px}
+  .estado p{color:var(--muted);font-size:15px;line-height:1.55;margin:0}
+  .estado .barra{width:38px;height:4px;background:var(--red);border-radius:2px;margin:0 auto 18px}
+  .estado button{
+    margin-top:18px;background:transparent;border:1px solid var(--line);color:var(--ink);
+    padding:12px 20px;border-radius:10px;font-family:inherit;font-size:14px;cursor:pointer;
+  }
+
+  /* credencial (confirmação) */
+  .credencial{
+    background:linear-gradient(160deg,#0F2C4E 0%, #0A1E36 100%);
+    border:1px solid var(--line);border-radius:18px;overflow:hidden;
+    position:relative;animation:sobe .45s cubic-bezier(.2,.7,.3,1) both;
+  }
+  @keyframes sobe{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .credencial::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--red)}
+  .cred-topo{padding:24px 24px 18px 28px;display:flex;align-items:flex-start;gap:14px}
+  .cred-selo{
+    margin-left:auto;flex:none;font-family:"Space Grotesk",sans-serif;font-size:11px;font-weight:700;
+    letter-spacing:.14em;color:var(--ok);border:1.5px solid var(--ok);border-radius:6px;
+    padding:6px 9px;transform:rotate(-4deg);white-space:nowrap;
+  }
+  .cred-topo h2{font-family:"Space Grotesk",sans-serif;font-size:22px;margin:0 0 4px;line-height:1.2}
+  .cred-topo p{margin:0;font-size:13.5px;color:var(--muted)}
+  .picote{border-top:1px dashed var(--line);position:relative}
+  .picote::before,.picote::after{
+    content:"";position:absolute;top:-9px;width:18px;height:18px;border-radius:50%;
+    background:#04101D;border:1px solid var(--line);
+  }
+  .picote::before{left:-10px}
+  .picote::after{right:-10px}
+  .cred-dados{padding:20px 24px 24px 28px;display:grid;grid-template-columns:1fr 1fr;gap:16px 12px}
+  .cred-dados .full{grid-column:1/-1}
+  .cred-dados dt{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#6E8CAC;margin-bottom:5px}
+  .cred-dados dd{margin:0;font-size:16px;font-weight:500;word-break:break-word}
+  .cred-dados dd.mono{font-family:"IBM Plex Mono",monospace;letter-spacing:.06em}
+  .aviso-dup{
+    margin:0 24px 22px 28px;padding:12px 14px;border-radius:10px;
+    background:rgba(255,190,80,.1);border:1px solid rgba(255,190,80,.35);
+    color:#FFD79A;font-size:13.5px;line-height:1.45;
+  }
+
+  footer{margin-top:28px;font-size:11.5px;line-height:1.6;color:#5C7897;text-align:center}
+  .oculto{display:none !important}
+  @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true"></div>
+    <div class="brand-name">CASSOL</div>
+    <div class="brand-tag">Treinamento de IA</div>
+  </div>
+
+  <!-- carregando -->
+  <div id="carregando" class="estado">
+    <div class="barra"></div>
+    <h2>Abrindo a lista</h2>
+    <p>Um instante.</p>
+  </div>
+
+  <!-- sem turma na URL -->
+  <div id="sem-turma" class="estado oculto">
+    <div class="barra"></div>
+    <h2>Use o QR code da sala</h2>
+    <p>Este link precisa vir do QR code projetado no treinamento. Aponte a câmera do celular para o código e abra o endereço que aparecer.</p>
+  </div>
+
+  <!-- turma fechada -->
+  <div id="fechada" class="estado oculto">
+    <div class="barra"></div>
+    <h2>Lista encerrada</h2>
+    <p>A coleta de presença desta turma já foi fechada. Procure o responsável pelo treinamento.</p>
+  </div>
+
+  <!-- falha de conexão -->
+  <div id="falha" class="estado oculto">
+    <div class="barra"></div>
+    <h2>Não deu para conectar</h2>
+    <p>Verifique o Wi-Fi ou os dados do celular e tente de novo. Se não funcionar, assine a lista impressa com o instrutor.</p>
+    <button type="button" onclick="location.reload()">Tentar de novo</button>
+  </div>
+
+  <!-- formulário -->
+  <div id="form" class="oculto">
+    <h1>Confirme sua presença</h1>
+    <p class="sub">Três campos e você está registrado.</p>
+    <div class="turma-chip">TURMA <b id="chip-turma">—</b></div>
+
+    <div class="field" id="f-matricula">
+      <label for="matricula">Matrícula</label>
+      <input id="matricula" inputmode="numeric" autocomplete="off" maxlength="10" placeholder="10482" enterkeyhint="next">
+      <div class="hint">Somente números, até 10 dígitos.</div>
+      <div class="erro" id="e-matricula">Informe sua matrícula.</div>
+    </div>
+
+    <div class="field" id="f-nome">
+      <label for="nome">Nome completo</label>
+      <input id="nome" autocomplete="name" autocapitalize="words" maxlength="80" placeholder="Nome e sobrenome" enterkeyhint="next">
+      <div class="erro" id="e-nome">Digite nome e sobrenome.</div>
+    </div>
+
+    <div class="field" id="f-setor">
+      <label for="setor">Setor</label>
+      <input id="setor" list="setores" autocomplete="off" autocapitalize="words" maxlength="30" placeholder="Onde você trabalha" enterkeyhint="done">
+      <datalist id="setores"></datalist>
+      <div class="hint">Comece a digitar: os setores já usados aparecem como sugestão.</div>
+      <div class="erro" id="e-setor">Informe seu setor.</div>
+    </div>
+
+    <button class="primary" id="enviar" type="button">Registrar presença</button>
+  </div>
+
+  <!-- confirmação -->
+  <div id="ok" class="oculto">
+    <div class="credencial">
+      <div class="cred-topo">
+        <div>
+          <h2>Presença registrada</h2>
+          <p>Confira seus dados. Se algo estiver errado, avise o instrutor.</p>
+        </div>
+        <div class="cred-selo">CONFIRMADO</div>
+      </div>
+      <div class="picote"></div>
+      <dl class="cred-dados">
+        <div class="full">
+          <dt>Nome</dt><dd id="c-nome">—</dd>
+        </div>
+        <div>
+          <dt>Matrícula</dt><dd class="mono" id="c-matricula">—</dd>
+        </div>
+        <div>
+          <dt>Horário</dt><dd class="mono" id="c-hora">—</dd>
+        </div>
+        <div class="full">
+          <dt>Setor</dt><dd id="c-setor">—</dd>
+        </div>
+        <div class="full">
+          <dt>Turma</dt><dd class="mono" id="c-turma">—</dd>
+        </div>
+      </dl>
+      <div class="aviso-dup oculto" id="c-dup">Já havia um registro com esta matrícula nesta turma. O novo envio foi gravado e marcado como duplicado para o organizador conferir.</div>
+    </div>
+  </div>
+
+  <footer>
+    Matrícula, nome e setor são coletados apenas para registrar a participação neste treinamento.<br>
+    CASSOL · Gestão Administrativa e Operações
+  </footer>
+</div>
+
+<script>
+/* ---------------------------------------------------------------
+   CONFIGURAÇÃO — cole a URL do app do Apps Script (termina em /exec)
+--------------------------------------------------------------- */
+const API = "https://script.google.com/macros/s/AKfycbwlnhZTXvoW-UoNRBS_vTlNf4qWiiaQ8Hq4mIOJs_JFVJGt_AgRpDuDnP6vB4OxYO3e7Q/exec";
+
+const $ = s => document.querySelector(s);
+const turma = new URLSearchParams(location.search).get("turma") || "";
+
+function mostrar(id){
+  ["carregando","sem-turma","fechada","falha","form","ok"].forEach(x=>{
+    $("#"+x).classList.toggle("oculto", x !== id);
+  });
+}
+
+async function api(payload){
+  const r = await fetch(API, {
+    method:"POST",
+    headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body: JSON.stringify(payload),
+    redirect:"follow"
+  });
+  return r.json();
+}
+
+async function iniciar(){
+  if(!turma){ mostrar("sem-turma"); return; }
+  try{
+    const res = await api({acao:"status", turma});
+    if(!res.ok || !res.existe){ mostrar("sem-turma"); return; }
+    if(!res.aberta){ mostrar("fechada"); return; }
+    $("#chip-turma").textContent = res.titulo || turma;
+    $("#setores").innerHTML = (res.setores||[])
+      .map(s=>`<option value="${s.replace(/"/g,"&quot;")}"></option>`).join("");
+    mostrar("form");
+    $("#matricula").focus();
+  }catch(e){ mostrar("falha"); }
+}
+
+function marcar(campo, invalido, msg){
+  const el = $("#f-"+campo);
+  el.classList.toggle("invalido", invalido);
+  if(msg) $("#e-"+campo).textContent = msg;
+  return !invalido;
+}
+
+$("#matricula").addEventListener("input", e=>{
+  e.target.value = e.target.value.replace(/\D/g,"").slice(0,10);
+});
+
+function validar(){
+  const m = $("#matricula").value.trim();
+  const n = $("#nome").value.trim().replace(/\s+/g," ");
+  const s = $("#setor").value.trim().replace(/\s+/g," ");
+
+  let ok = true;
+  ok = marcar("matricula", !m, "Informe sua matrícula.") && ok;
+
+  if(!n) ok = marcar("nome", true, "Informe seu nome completo.") && ok;
+  else if(/\d/.test(n)) ok = marcar("nome", true, "O nome não deve conter números.") && ok;
+  else if(n.split(" ").filter(p=>p.length>1).length < 2) ok = marcar("nome", true, "Digite nome e sobrenome.") && ok;
+  else marcar("nome", false);
+
+  ok = marcar("setor", !s, "Informe seu setor.") && ok;
+  return ok ? {matricula:m, nome:n, setor:s} : null;
+}
+
+$("#enviar").addEventListener("click", async ()=>{
+  const dados = validar();
+  if(!dados) return;
+  const btn = $("#enviar");
+  btn.disabled = true; btn.textContent = "Registrando…";
+  try{
+    const res = await api({acao:"registrar", turma, ...dados});
+    if(!res.ok){
+      if(res.motivo === "fechada"){ mostrar("fechada"); return; }
+      throw new Error(res.motivo || "falha");
+    }
+    $("#c-nome").textContent = res.registro.nome;
+    $("#c-matricula").textContent = res.registro.matricula;
+    $("#c-setor").textContent = res.registro.setor;
+    $("#c-hora").textContent = res.registro.hora;
+    $("#c-turma").textContent = res.registro.turma;
+    $("#c-dup").classList.toggle("oculto", res.status !== "DUPLICADO");
+    mostrar("ok");
+    window.scrollTo({top:0});
+  }catch(e){
+    mostrar("falha");
+  }finally{
+    btn.disabled = false; btn.textContent = "Registrar presença";
+  }
+});
+
+["matricula","nome","setor"].forEach(id=>{
+  $("#"+id).addEventListener("keydown", e=>{
+    if(e.key !== "Enter") return;
+    e.preventDefault();
+    if(id === "setor") $("#enviar").click();
+    else $("#"+(id==="matricula"?"nome":"setor")).focus();
+  });
+});
+
+iniciar();
+</script>
+</body>
+</html>
